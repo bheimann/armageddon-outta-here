@@ -25,11 +25,10 @@ The same layout as Deadtime Defenders, on an Xbox-style controller (we play on L
 | X | Punch |
 | Y | Attack: fire the selected weapon |
 | A | Dodge roll |
-| B | Select the first weapon |
-| LB, RB, LT, RT | Each selects a different weapon or mech ability |
+| B, LB, RB, LT, RT | The 5 loadout slots. Each selects what's in that slot |
 
 Players aim in whichever direction they're facing. There's no right-stick aiming. To attack or use an ability, a
-player selects it (B or a shoulder button), then fires it with Y.
+player selects it with its slot button, then fires it with Y. See [Loadout](#loadout).
 
 **In menus**
 
@@ -95,16 +94,8 @@ Suits are found during runs, not built. They're made from junk, and each one pla
 - **Suits belong to the team.** Any player can use any suit the team has found.
 - **Up to 4 of each suit**, one per player, even when fewer than 4 people are playing. Finding a suit the team
   already has adds another copy, up to 4.
-- **A suit is equipped like a weapon.** It takes up one weapon slot (B, LB, RB, LT or RT) and is fired with Y.
-- **Suit levels:** upgrading a suit adds attacks. It always takes up one slot.
-
-  | Level | Slots | Attacks |
-  |---|---|---|
-  | 1 | 1 | 1 |
-  | 2 | 1 | 2 |
-  | 3 | 1 | 3 |
-  | 4 | 1 | 4 |
-
+- **Every player is always in a basic junk mech.** Suits are equipped on top of it, in the loadout like weapons
+  (see [Loadout](#loadout)), and add attacks.
 - **Upgrades belong to each suit.** Each copy of a suit keeps its own upgrades.
 - **Weapons work the same way:** found during runs, shared by the team, up to 4 copies of each, and each copy
   keeps its own upgrades.
@@ -118,3 +109,45 @@ Suits are found during runs, not built. They're made from junk, and each one pla
 | Mailbox Mk II | Fires packages as artillery |
 | Grill Sergeant | Flamethrower that buffs the team |
 | The Shopping Cart | Fast and fragile, rams enemies |
+
+## Loadout
+
+Each player has **5 slots**, one per slot button (B, LB, RB, LT, RT). Guns and suits are equipped into them.
+
+| Gear | Slots it takes |
+|---|---|
+| Gun | 1 |
+| Heavy gun: minigun, RPG, grenade launcher, flamethrower | 2 |
+| Suit | 1 per suit level: level 1 takes 1 slot, up to level 4 taking 4 slots |
+
+- Each slot a suit takes holds one of its attacks, so a level 3 suit has 3 attacks on 3 slot buttons.
+- A player always has at least one gun or suit equipped.
+- Examples: 4 guns and a level 1 suit. A level 3 suit and a heavy gun. Two heavy guns and a gun.
+
+## Bosses
+
+Draft, to be edited. One boss per enemy type, one for each of the first 3 levels.
+
+| Level | Enemies | Boss |
+|---|---|---|
+| 1 | Raccoons | **The Trash Panda King**: a giant raccoon riding a stolen garbage truck. Throws trash bags and calls in raccoon swarms. |
+| 2 | Zombies | **Big Mall Cop**: a huge zombie security guard on a Segway, with a whistle that makes every zombie charge. |
+| 3 | Aliens | **The Probe-ssor**: an alien scientist in a flying saucer that beams up junk, including players' mechs, and drops it back on them. |
+
+## Story
+
+Draft, to be edited.
+
+Everything went wrong at once. A meteor hit, the zombies came up, and the aliens arrived to see what all the
+noise was about. Meanwhile the raccoons, who'd been waiting for this their whole lives, took over the
+landfill.
+
+What's left of the neighborhood is a garage full of junk, and a crew of neighbors who decide the only sensible
+move is to bolt lawnmowers, fridges and shopping carts into mech suits and defend whatever's still standing.
+They're not leaving. Armageddon can get outta *here*.
+
+## First playable version
+
+- 3 levels, one per enemy type, each ending in its boss.
+- Enough suits, guns and heavy guns to test the loadout and upgrades.
+- The garage with the workbench, mission board, wardrobe and side door.
