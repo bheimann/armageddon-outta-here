@@ -36,10 +36,10 @@ public class ProgressTests
     [Fact]
     public void Waves_grow_and_more_players_bring_more_enemies()
     {
-        var level = Levels.Get(1);
+        var level = LevelCatalog.Get(1);
 
-        var solo = Levels.WavesFor(level, 1);
-        var four = Levels.WavesFor(level, 4);
+        var solo = LevelCatalog.WavesFor(level, 1);
+        var four = LevelCatalog.WavesFor(level, 4);
 
         Assert.Equal(level.Waves, solo.Count);
         Assert.True(solo[1].Total > solo[0].Total);
@@ -49,7 +49,7 @@ public class ProgressTests
     [Fact]
     public void Later_levels_mix_in_earlier_enemies()
     {
-        var wave = Levels.WavesFor(Levels.Get(3), 1)[0];
+        var wave = LevelCatalog.WavesFor(LevelCatalog.Get(3), 1)[0];
 
         Assert.Equal(
             new HashSet<EnemyKind> { EnemyKind.Raccoon, EnemyKind.Zombie, EnemyKind.Alien },

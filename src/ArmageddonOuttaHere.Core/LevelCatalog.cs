@@ -16,7 +16,7 @@ public sealed record Wave(int Number, IReadOnlyDictionary<EnemyKind, int> Enemie
     public int Total => Enemies.Values.Sum();
 }
 
-public static class Levels
+public static class LevelCatalog
 {
     public static IReadOnlyList<LevelInfo> All { get; } = new[]
     {
