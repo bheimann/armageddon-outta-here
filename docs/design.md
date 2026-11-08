@@ -111,7 +111,10 @@ duct tape to high-tech suits: military prototypes left behind in the chaos, and 
 - **Only equipped gear can be upgraded.** At the workbench, a player can only upgrade the suit and weapons they
   have equipped, using their own character's scrap.
 - **Every character starts with a pistol.** It's free and doesn't count against the team's 4 copies, so nobody
-  is ever left with an empty loadout.
+  is ever left with an empty loadout. The pistol stays theirs when it's unequipped, so it can go back in later.
+- **Upgrade costs:** 50 scrap times the current level (50, then 100, then 150). A first guess until playtesting.
+- **Gun upgrades** make a gun hit harder (25% more damage per level). **Suit upgrades** add an attack and take
+  another slot, so a suit can only be upgraded when there's a free slot.
 
 | Suit | Tech | Role |
 |---|---|---|
