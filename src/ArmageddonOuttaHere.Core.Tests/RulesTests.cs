@@ -87,6 +87,20 @@ public class RulesTests
     }
 
     [Fact]
+    public void Pistol_can_be_unequipped_to_make_room_and_equipped_again()
+    {
+        var pistol = First.Starter;
+        _save.Equip(First, _save.Armory.Find(Fridge)!);
+
+        Assert.True(_save.Unequip(First, pistol));
+        Assert.Contains(pistol, _save.Equippable(First));
+        Assert.DoesNotContain(pistol, _save.Equippable(_save.Characters[1]));
+
+        Assert.True(_save.Equip(First, pistol));
+        Assert.False(_save.Equip(_save.Characters[1], pistol));
+    }
+
+    [Fact]
     public void Last_piece_of_gear_cannot_be_unequipped()
     {
         Assert.False(_save.Unequip(First, First.Loadout.Items[0]));

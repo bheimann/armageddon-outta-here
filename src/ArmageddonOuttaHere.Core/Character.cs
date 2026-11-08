@@ -6,8 +6,12 @@ public sealed class Character
     internal Character(string name, GearItem starterGun)
     {
         Name = name;
+        Starter = starterGun;
         Loadout = new Loadout(starterGun);
     }
+
+    /// <summary>This character's own pistol. It stays theirs when it's unequipped, so it can go back in later.</summary>
+    public GearItem Starter { get; }
 
     public Guid Id { get; init; } = Guid.NewGuid();
 

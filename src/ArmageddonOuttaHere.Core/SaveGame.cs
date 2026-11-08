@@ -55,9 +55,8 @@ public sealed class SaveGame
     /// <summary>Puts a team copy into a character's loadout. Fails if it doesn't fit or another character has it.</summary>
     public bool Equip(Character character, GearItem item)
     {
-        if (!Armory.Items.Contains(item)
-            || _characters.Any(c => c.Loadout.Contains(item))
-            || !character.Loadout.CanFit(item.Slots))
+        var owned = Armory.Items.Contains(item) || item == character.Starter;
+        if (!owned || EquippedBy(item) is not null || !character.Loadout.CanFit(item.Slots))
         {
             return false;
         }
@@ -65,6 +64,10 @@ public sealed class SaveGame
         character.Loadout.Add(item);
         return true;
     }
+
+    /// <summary>What a character could put in their loadout: their own pistol and the team's free copies.</summary>
+    public IEnumerable<GearItem> Equippable(Character character) =>
+        Armory.Items.Prepend(character.Starter).Where(i => EquippedBy(i) is null);
 
     /// <summary>Takes gear out of a loadout. Fails if it's the last thing equipped.</summary>
     public bool Unequip(Character character, GearItem item) => character.Loadout.Remove(item);

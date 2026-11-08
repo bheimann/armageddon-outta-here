@@ -56,5 +56,12 @@ public sealed class Loadout
 
     internal void Add(GearItem item) => _items.Add(item);
 
+    /// <summary>Sets the whole loadout at once (loading a save).</summary>
+    internal void Replace(IReadOnlyList<GearItem> items)
+    {
+        _items.Clear();
+        _items.AddRange(items);
+    }
+
     internal bool Remove(GearItem item) => _items.Count > 1 && _items.Remove(item);
 }

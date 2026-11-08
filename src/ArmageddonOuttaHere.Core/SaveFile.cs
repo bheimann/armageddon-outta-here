@@ -17,7 +17,8 @@ public static class SaveFile
                 c.Name,
                 c.Scrap,
                 c.Appearance.Color,
-                c.Loadout.Items.Select(i => i.IsStarter ? ToData(i) : new ItemData(i.Id, null, 0, false)).ToList()))
+                ToData(c.Starter),
+                c.Loadout.Items.Select(i => i.Id).ToList()))
             .ToList());
         return JsonSerializer.Serialize(data, Options);
     }
@@ -41,30 +42,28 @@ public static class SaveFile
 
         foreach (var c in data.Characters)
         {
-            // Starter pistols live only in their character's loadout; everything else points at a team copy.
-            var loadout = c.Loadout
-                .Select(i => i.Starter ? ToItem(i) : armory.GetValueOrDefault(i.Id))
-                .OfType<GearItem>()
-                .ToList();
-            if (loadout.Count == 0)
-            {
-                loadout.Add(new GearItem(GearType.Pistol, isStarter: true));
-            }
-
-            var character = new Character(SaveGame.CheckName(c.Name), loadout[0])
+            // Each character's own pistol is stored with them; the loadout lists item ids, pointing at the pistol
+            // or at team copies.
+            var starter = ToItem(c.Starter with { Starter = true }) ?? new GearItem(GearType.Pistol, isStarter: true);
+            var character = new Character(SaveGame.CheckName(c.Name), starter)
             {
                 Id = c.Id,
                 Scrap = Math.Max(0, c.Scrap),
                 Appearance = new Appearance(c.Color),
             };
-            foreach (var item in loadout.Skip(1))
+
+            var loadout = new List<GearItem>();
+            foreach (var id in c.Loadout)
             {
-                if (character.Loadout.CanFit(item.Slots) && save.EquippedBy(item) is null)
+                var item = id == starter.Id ? starter : armory.GetValueOrDefault(id);
+                if (item is not null && !loadout.Contains(item) && save.EquippedBy(item) is null
+                    && loadout.Sum(i => i.Slots) + item.Slots <= Loadout.SlotCount)
                 {
-                    character.Loadout.Add(item);
+                    loadout.Add(item);
                 }
             }
 
+            character.Loadout.Replace(loadout.Count > 0 ? loadout : new List<GearItem> { starter });
             save.AddLoaded(character);
         }
 
@@ -89,8 +88,7 @@ public static class SaveFile
 
     private sealed record SaveData(int UnlockedLevel, List<ItemData> Armory, List<CharacterData> Characters);
 
-    private sealed record CharacterData(Guid Id, string Name, int Scrap, int Color, List<ItemData> Loadout);
+    private sealed record CharacterData(Guid Id, string Name, int Scrap, int Color, ItemData Starter, List<Guid> Loadout);
 
-    /// <summary>A gun or suit. In a loadout, team copies only carry their <see cref="Id"/>.</summary>
     private sealed record ItemData(Guid Id, string? Type, int Level, bool Starter);
 }

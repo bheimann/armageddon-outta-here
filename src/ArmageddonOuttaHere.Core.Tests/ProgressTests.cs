@@ -84,4 +84,19 @@ public class ProgressTests
         Assert.Same(loadedFridge, loaded.Armory.CopiesOf(GearCatalog.Fridge).Single());
         Assert.Equal(2, loaded.Armory.Items.Count);
     }
+
+    [Fact]
+    public void Save_keeps_an_unequipped_pistol()
+    {
+        var save = new SaveGame();
+        var first = save.Characters[0];
+        save.Equip(first, save.Armory.Find(GearCatalog.Minigun)!);
+        save.Unequip(first, first.Starter);
+
+        var loaded = SaveFile.FromJson(SaveFile.ToJson(save)).Characters[0];
+
+        Assert.Equal(new[] { "minigun" }, loaded.Loadout.Items.Select(i => i.Type.Id));
+        Assert.Equal(first.Starter.Id, loaded.Starter.Id);
+        Assert.Equal(GearType.Pistol, loaded.Starter.Type);
+    }
 }
