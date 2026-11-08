@@ -40,8 +40,8 @@ player selects it (B or a shoulder button), then fires it with Y.
 
 ## Running
 
-- **Players:** 1 to 4, mainly on controllers. One or two can play on keyboard and mouse. Players join by pressing
-  Start on a lobby screen.
+- **Players:** 1 to 4, mainly on controllers. One or two can play on keyboard and mouse.
+- **Joining:** players join only in the garage, never during a run. See [Hub: the garage](#hub-the-garage).
 - **Platform:** Windows PC first. Linux and Steam Deck later.
 - **Builds:** published from GitHub release tags, as in `game-lab`.
 - **Online:** if it reaches Steam, Remote Play Together lets friends play over the internet without any
@@ -61,6 +61,8 @@ Between runs, the crew returns to a cluttered suburban garage, with the mechs pa
 - **Workbench:** upgrade weapons and mech suits with scrap.
 - **Mission board:** select the next level.
 - **Wardrobe:** change your character's appearance.
+- **Side door:** where new players come in. Press Start on an unused controller while in the garage, and a new
+  character walks in through the side door. During a run, Start on an unused controller does nothing.
 
 Being considered: split screen in the garage, so each player can upgrade and change their appearance without
 waiting for the others.
