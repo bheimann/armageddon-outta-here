@@ -53,6 +53,11 @@ player selects it (B or a shoulder button), then fires it with Y.
 
 - **Runs:** waves of wasteland threats attack the base. A break between waves is for repairs and spending scrap.
 - **Run length:** about 5 minutes at the starting levels, up to 10 minutes for harder ones.
+- **Enemies:** raccoons, zombies and aliens.
+- **Finding suits and weapons:** supply crates appear on the map during waves, and players have to go grab them.
+- **Downed players:** at 0 health a player is knocked down and stays down until a teammate revives them. There's
+  no time limit. If every player is down, the run is lost.
+- **Losing a run:** players keep everything they collected: scrap, suits and weapons.
 
 ## Hub: the garage
 
