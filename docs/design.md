@@ -1,7 +1,7 @@
 # Armageddon Outta Here: Design
 
-A goofy, post-apocalyptic local multiplayer defense game in the spirit of Deadtime Defenders, with junkyard mech
-suits that are unlocked through play.
+A goofy, post-apocalyptic local multiplayer defense game in the spirit of Deadtime Defenders, with mech suits
+that are unlocked through play, from junkyard contraptions to high-tech prototypes.
 
 ## Display
 
@@ -89,7 +89,8 @@ waiting for the others.
 
 ## Mech suits
 
-Suits are found during runs, not built. They're made from junk, and each one plays differently.
+Suits are found during runs, not built, and each one plays differently. They range from junk held together with
+duct tape to high-tech suits: military prototypes left behind in the chaos, and salvaged alien tech.
 
 - **Suits belong to the team.** Any player can use any suit the team has found.
 - **Up to 4 of each suit**, one per player, even when fewer than 4 people are playing. Finding a suit the team
@@ -101,14 +102,19 @@ Suits are found during runs, not built. They're made from junk, and each one pla
   keeps its own upgrades.
 - **Only equipped gear can be upgraded.** At the workbench, a player can only upgrade the suit and weapons they
   have equipped, using their own character's scrap.
+- **Starter gun (assumption, to confirm):** every character always has a free basic gun that doesn't count
+  against the team's 4 copies, so nobody is ever left with an empty loadout.
 
-| Suit | Role |
-|---|---|
-| The Fridge | Slow tank with a freezer beam |
-| Lawnmower Larry | Spins its blades through crowds |
-| Mailbox Mk II | Fires packages as artillery |
-| Grill Sergeant | Flamethrower that buffs the team |
-| The Shopping Cart | Fast and fragile, rams enemies |
+| Suit | Tech | Role |
+|---|---|---|
+| The Fridge | Junk | Slow tank with a freezer beam |
+| Lawnmower Larry | Junk | Spins its blades through crowds |
+| Mailbox Mk II | Junk | Fires packages as artillery |
+| Grill Sergeant | Junk | Flamethrower that buffs the team |
+| The Shopping Cart | Junk | Fast and fragile, rams enemies |
+| Prototype X-9 "Sparky" | High tech | A military prototype that chains lightning between enemies |
+| The Hover Commander | High tech | Hovers over obstacles and calls in drone strikes |
+| Probe Reverser | Alien tech | A salvaged alien suit with a tractor beam that throws enemies around |
 
 ## Loadout
 
@@ -144,6 +150,8 @@ landfill.
 
 What's left of the neighborhood is a garage full of junk, and a crew of neighbors who decide the only sensible
 move is to bolt lawnmowers, fridges and shopping carts into mech suits and defend whatever's still standing.
+Along the way they scavenge better: the army left prototype suits behind when it fled, and the aliens drop
+their tech when they're beaten.
 They're not leaving. Armageddon can get outta *here*.
 
 ## First playable version

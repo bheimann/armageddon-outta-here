@@ -1,7 +1,8 @@
 # Armageddon Outta Here
 
 A goofy, post-apocalyptic local multiplayer defense game. Friends on one couch, one screen, holding the line
-against the end of the world in junkyard mech suits held together with duct tape and hope.
+against the end of the world in mech suits, from junk held together with duct tape and hope to high-tech
+military and alien prototypes.
 
 ## The idea
 
