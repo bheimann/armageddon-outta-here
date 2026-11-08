@@ -9,7 +9,7 @@ that are unlocked through play, from junkyard contraptions to high-tech prototyp
 - **Art style:** cartoon. Smooth, bright, exaggerated art with squash and stretch to sell the goofy tone. For
   references, see *Overcooked*, *Brawlhalla*, *Cult of the Lamb* and *Death Squared*.
 - **Camera:** one shared screen during runs, no split screen. The camera follows the group and zooms out as
-  players spread apart. The garage may use split screen (see [Hub: the garage](#hub-the-garage)).
+  players spread apart. The garage uses split screen (see [Hub: the garage](#hub-the-garage)).
 - **Screen:** fullscreen 16:9, with a windowed option for testing.
 - **Player colors:** each player has their own color on their mech outline, health bar and cursor.
 
@@ -53,14 +53,19 @@ player selects it with its slot button, then fires it with Y. See [Loadout](#loa
 - **Not a roguelike.** Levels are fixed, and everything players earn (scrap, suits, weapons, upgrades) is kept
   for good. A "run" here just means one play of a level.
 - **Levels:** each level has its own spot to defend, such as a gas station, a radio tower or a school bus full of
-  survivors. Waves of enemies attack it, with a short break between waves for repairs.
+  survivors. Waves of enemies attack it, with a short break between waves.
+- **Repairs:** the base slowly repairs itself during the breaks between waves. Players standing next to it repair
+  it faster, at any time.
 - **Winning:** survive the waves, then beat the boss that shows up at the end.
 - **Level order:** beating a level unlocks the next one. Players can replay any level they've beaten.
 - **Run length:** about 5 minutes at the starting levels, up to 10 minutes for harder ones.
-- **Enemies:** raccoons, zombies and aliens.
+- **Enemies:** raccoons, zombies and aliens. They go after players first: each one chases the nearest player it
+  can see, and heads for the base when no player is near.
+- **Friendly fire:** players' shots hurt teammates. A bullet damages a teammate and keeps flying through them.
+- **Scrap drops:** scrap from enemies is split evenly between every player in the level.
 - **Finding suits and weapons:** supply crates appear on the map during waves, and players have to go grab them.
-- **Downed players:** at 0 health a player is knocked down and stays down until a teammate revives them. There's
-  no time limit. If every player is down, the run is lost.
+- **Downed players:** at 0 health a player is knocked down and stays down until a teammate revives them by
+  standing next to them for about 2 seconds. There's no time limit. If every player is down, the run is lost.
 - **Losing a run:** players keep everything they collected: scrap, suits and weapons.
 
 ## Hub: the garage
@@ -75,12 +80,15 @@ Between runs, the crew returns to a cluttered suburban garage, with the mechs pa
     or creates a new one (see [Save games and characters](#save-games-and-characters)), and that character walks
     in through the side door. During a run, Start on an unused controller does nothing.
   - **Leaving:** walk back out through the side door.
+- **Filing cabinet:** switch to a different save game.
 
-Being considered: split screen in the garage, so each player can upgrade and change their appearance without
-waiting for the others.
+**Split screen:** the garage is split screen, one view per player, so each player can use the workbench, the
+wardrobe or pick a character without waiting for the others. Levels go back to one shared screen.
 
 ## Save games and characters
 
+- **5 save games.** The game continues the last save used. Players switch saves at the filing cabinet in the
+  garage.
 - Each save game starts with 4 characters, each with 0 scrap. They're customizable: players can change their name
   and appearance.
 - When joining, a player either picks an existing character or creates a new one. A new character needs a name,
