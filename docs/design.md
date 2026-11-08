@@ -72,7 +72,8 @@ waiting for the others.
 
 ## Save games and characters
 
-- Each save game starts with 4 characters, each with 0 scrap.
+- Each save game starts with 4 characters, each with 0 scrap. They're customizable: players can change their name
+  and appearance.
 - When joining, a player either picks an existing character or creates a new one. A new character needs a name,
   and starts with 0 scrap.
 - **Scrap belongs to the character.** Each character collects and spends their own.
@@ -85,6 +86,8 @@ Suits are found during runs, not built. They're made from junk, and each one pla
 - **Up to 4 of each suit**, one per player, even when fewer than 4 people are playing. Finding a suit the team
   already has adds another copy, up to 4.
 - **Upgrades belong to each suit.** Each copy of a suit keeps its own upgrades.
+- **Weapons work the same way:** found during runs, shared by the team, up to 4 copies of each, and each copy
+  keeps its own upgrades.
 - **Only equipped gear can be upgraded.** At the workbench, a player can only upgrade the suit and weapons they
   have equipped, using their own character's scrap.
 
