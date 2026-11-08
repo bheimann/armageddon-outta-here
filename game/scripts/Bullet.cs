@@ -2,7 +2,7 @@ using Godot;
 
 namespace ArmageddonOuttaHere;
 
-/// <summary>A placeholder shot from the starter gun. Flies straight and disappears after a short time.</summary>
+/// <summary>A placeholder pistol shot. Flies straight and disappears after a short time.</summary>
 public partial class Bullet : Node2D
 {
     private const float Speed = 700f;

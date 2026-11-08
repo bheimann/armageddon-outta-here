@@ -7,17 +7,16 @@ public sealed class SaveGame
 
     private readonly List<Character> _characters = new();
 
-    public SaveGame(GearType starterGun)
+    public SaveGame()
     {
-        StarterGun = starterGun;
         for (var i = 1; i <= StartingCharacters; i++)
         {
             CreateCharacter($"Player {i}");
         }
     }
 
-    /// <summary>The basic gun every character has. Free, and not limited to 4 copies.</summary>
-    public GearType StarterGun { get; }
+    /// <summary>The gun every character starts with: a pistol. Free, and not limited to 4 copies.</summary>
+    public GearType StarterGun => GearType.Pistol;
 
     public Armory Armory { get; } = new();
 

@@ -16,6 +16,9 @@ public enum GearKind
 public sealed record GearType(string Id, string Name, GearKind Kind)
 {
     public const int MaxLevel = 4;
+
+    /// <summary>Every character starts with one.</summary>
+    public static readonly GearType Pistol = new("pistol", "Pistol", GearKind.Gun);
 }
 
 /// <summary>One copy of a gun or suit owned by the team. Each copy keeps its own upgrades.</summary>

@@ -102,8 +102,8 @@ duct tape to high-tech suits: military prototypes left behind in the chaos, and 
   keeps its own upgrades.
 - **Only equipped gear can be upgraded.** At the workbench, a player can only upgrade the suit and weapons they
   have equipped, using their own character's scrap.
-- **Starter gun (assumption, to confirm):** every character always has a free basic gun that doesn't count
-  against the team's 4 copies, so nobody is ever left with an empty loadout.
+- **Every character starts with a pistol.** It's free and doesn't count against the team's 4 copies, so nobody
+  is ever left with an empty loadout.
 
 | Suit | Tech | Role |
 |---|---|---|

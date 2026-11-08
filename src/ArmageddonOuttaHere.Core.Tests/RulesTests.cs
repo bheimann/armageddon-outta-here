@@ -2,21 +2,28 @@ namespace ArmageddonOuttaHere.Core.Tests;
 
 public class RulesTests
 {
-    private static readonly GearType PeaShooter = new("pea-shooter", "Pea Shooter", GearKind.Gun);
     private static readonly GearType NailGun = new("nail-gun", "Nail Gun", GearKind.Gun);
     private static readonly GearType Minigun = new("minigun", "Minigun", GearKind.HeavyGun);
     private static readonly GearType Fridge = new("fridge", "The Fridge", GearKind.Suit);
 
-    private readonly SaveGame _save = new(PeaShooter);
+    private readonly SaveGame _save = new();
 
     private Character First => _save.Characters[0];
 
     [Fact]
-    public void New_save_has_four_characters_with_no_scrap_and_a_starter_gun()
+    public void New_save_has_four_characters_with_no_scrap_and_a_pistol()
     {
         Assert.Equal(4, _save.Characters.Count);
         Assert.All(_save.Characters, c => Assert.Equal(0, c.Scrap));
-        Assert.All(_save.Characters, c => Assert.True(Assert.Single(c.Loadout.Items).IsStarter));
+        Assert.All(_save.Characters, c => Assert.Equal(GearType.Pistol, Assert.Single(c.Loadout.Items).Type));
+    }
+
+    [Fact]
+    public void New_character_starts_with_a_pistol()
+    {
+        var character = _save.CreateCharacter("Dusty");
+
+        Assert.Equal(GearType.Pistol, Assert.Single(character.Loadout.Items).Type);
     }
 
     [Fact]
