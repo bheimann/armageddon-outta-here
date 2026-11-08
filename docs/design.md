@@ -61,16 +61,32 @@ Between runs, the crew returns to a cluttered suburban garage, with the mechs pa
 - **Workbench:** upgrade weapons and mech suits with scrap.
 - **Mission board:** select the next level.
 - **Wardrobe:** change your character's appearance.
-- **Side door:** where new players come in. Press Start on an unused controller while in the garage, and a new
-  character walks in through the side door. During a run, Start on an unused controller does nothing.
+- **Side door:** where players join and leave.
+  - **Joining:** press Start on an unused controller while in the garage. The player picks an existing character
+    or creates a new one (see [Save games and characters](#save-games-and-characters)), and that character walks
+    in through the side door. During a run, Start on an unused controller does nothing.
+  - **Leaving:** walk back out through the side door.
 
 Being considered: split screen in the garage, so each player can upgrade and change their appearance without
 waiting for the others.
 
+## Save games and characters
+
+- Each save game starts with 4 characters, each with 0 scrap.
+- When joining, a player either picks an existing character or creates a new one. A new character needs a name,
+  and starts with 0 scrap.
+- **Scrap belongs to the character.** Each character collects and spends their own.
+
 ## Mech suits
 
-Suits are found during runs, not built. Scrap collected in runs is spent at the workbench to upgrade suits and
-weapons. Suits are built from junk, and each one plays differently.
+Suits are found during runs, not built. They're made from junk, and each one plays differently.
+
+- **Suits belong to the team.** Any player can use any suit the team has found.
+- **Up to 4 of each suit**, one per player, even when fewer than 4 people are playing. Finding a suit the team
+  already has adds another copy, up to 4.
+- **Upgrades belong to each suit.** Each copy of a suit keeps its own upgrades.
+- **Only equipped gear can be upgraded.** At the workbench, a player can only upgrade the suit and weapons they
+  have equipped, using their own character's scrap.
 
 | Suit | Role |
 |---|---|
