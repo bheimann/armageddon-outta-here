@@ -23,10 +23,13 @@ The same layout as Deadtime Defenders, on an Xbox-style controller (we play on L
 |---|---|
 | Left stick | Move |
 | X | Punch |
-| Y | Attack |
+| Y | Attack: fire the selected weapon |
 | A | Dodge roll |
-| B | First weapon |
-| LB, RB, LT, RT | Each is assigned a different weapon or mech ability |
+| B | Select the first weapon |
+| LB, RB, LT, RT | Each selects a different weapon or uses a mech ability |
+
+Players aim in whichever direction they're facing. There's no right-stick aiming. To attack, a player selects a
+weapon (B or a shoulder button), then fires it with Y.
 
 **In menus**
 
