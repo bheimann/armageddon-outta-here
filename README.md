@@ -23,6 +23,24 @@ See [docs/design.md](docs/design.md) for the full design.
 | Grill Sergeant | Flamethrower that buffs the team |
 | The Shopping Cart | Fast and fragile, rams enemies |
 
+## Running the game
+
+Needs Godot 4.7 (.NET version) and the .NET 8 SDK.
+
+1. Open Godot, click **Import**, choose `game/project.godot`, then open it.
+2. Press **▶** (F5).
+3. Press **Start** on a controller to join (up to 4 players). On the keyboard: Enter joins, WASD moves, J fires,
+   Space dodge-rolls.
+
+## Tests
+
+The game rules (characters, scrap, the team's gear, loadouts and upgrades) live in `src/ArmageddonOuttaHere.Core`
+and have unit tests:
+
+```
+dotnet test src/ArmageddonOuttaHere.Core.Tests
+```
+
 ## Status
 
-Early concept. No code yet.
+Early prototype: a test arena where up to 4 players join, move, dodge-roll and shoot, with placeholder art.
