@@ -1,0 +1,67 @@
+# Builds a Windows version of the game on GitHub's machines.
+#
+# - Run it from the Actions tab ("Windows build" > "Run workflow") to get a zip you can download from the run.
+# - Push a version tag to publish it on the repo's Releases page:
+#     git tag v0.1.0
+#     git push origin v0.1.0
+name: Windows build
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+env:
+  GODOT_VERSION: "4.7.2"
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Run the rule tests
+        run: dotnet test src/ArmageddonOuttaHere.Core.Tests
+
+      - name: Get Godot (.NET version) and its export templates
+        run: |
+          url="https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable"
+          curl -fsSL -o godot.zip "$url/Godot_v${GODOT_VERSION}-stable_mono_linux_x86_64.zip"
+          curl -fsSL -o templates.tpz "$url/Godot_v${GODOT_VERSION}-stable_mono_export_templates.tpz"
+          unzip -q godot.zip -d godot-editor
+          unzip -q templates.tpz -d godot-templates
+          templates_dir="$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono"
+          mkdir -p "$templates_dir"
+          mv godot-templates/templates/* "$templates_dir/"
+          editor=$(find "$PWD/godot-editor" -type f -name 'Godot_v*_mono_linux.x86_64' | head -n 1)
+          chmod +x "$editor"
+          echo "GODOT=$editor" >> "$GITHUB_ENV"
+
+      - name: Export for Windows
+        run: |
+          mkdir -p build/windows
+          "$GODOT" --headless --path game --import || true
+          "$GODOT" --headless --path game --export-release "Windows" ../build/windows/ArmageddonOuttaHere.exe
+          test -f build/windows/ArmageddonOuttaHere.exe
+          cd build/windows && zip -qr ../ArmageddonOuttaHere-windows.zip .
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ArmageddonOuttaHere-windows
+          path: build/ArmageddonOuttaHere-windows.zip
+
+      - name: Publish the release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" build/ArmageddonOuttaHere-windows.zip \
+            --title "Armageddon Outta Here $GITHUB_REF_NAME" \
+            --notes "Download ArmageddonOuttaHere-windows.zip, unzip it anywhere and run ArmageddonOuttaHere.exe. Press Start on each controller to join."
