@@ -1,0 +1,13 @@
+# Godot 4
+.godot/
+/android/
+
+# Builds
+build/
+
+# C# / IDE
+bin/
+obj/
+.vs/
+*.user
+TestResults/

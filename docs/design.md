@@ -42,11 +42,11 @@ player selects it with its slot button, then fires it with Y. See [Loadout](#loa
 - **Players:** 1 to 4, mainly on controllers. One or two can play on keyboard and mouse.
 - **Joining:** players join only in the garage, never during a run. See [Hub: the garage](#hub-the-garage).
 - **Platform:** Windows PC first. Linux and Steam Deck later.
-- **Builds:** published from GitHub release tags, as in `game-lab`.
+- **Builds:** published from GitHub release tags.
 - **Online:** if it reaches Steam, Remote Play Together lets friends play over the internet without any
   networking code.
 - **Performance:** 60 fps target.
-- **Engine:** Godot 4 (C#), the same as `game-lab`.
+- **Engine:** Godot 4 (C#).
 
 ## Game structure
 
