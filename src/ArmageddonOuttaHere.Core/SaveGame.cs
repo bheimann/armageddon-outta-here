@@ -8,12 +8,27 @@ public sealed class SaveGame
     private readonly List<Character> _characters = new();
 
     public SaveGame()
+        : this(withStartingCharacters: true)
     {
+    }
+
+    private SaveGame(bool withStartingCharacters)
+    {
+        if (!withStartingCharacters)
+        {
+            return;
+        }
+
         for (var i = 1; i <= StartingCharacters; i++)
         {
             CreateCharacter($"Player {i}");
         }
     }
+
+    /// <summary>An empty save for <see cref="SaveFile"/> to fill in.</summary>
+    internal static SaveGame Empty() => new(withStartingCharacters: false);
+
+    internal void AddLoaded(Character character) => _characters.Add(character);
 
     /// <summary>The gun every character starts with: a pistol. Free, and not limited to 4 copies.</summary>
     public GearType StarterGun => GearType.Pistol;
@@ -23,7 +38,10 @@ public sealed class SaveGame
     public IReadOnlyList<Character> Characters => _characters;
 
     /// <summary>The highest level the team can play. Beating a level unlocks the next.</summary>
-    public int UnlockedLevel { get; private set; } = 1;
+    public int UnlockedLevel { get; internal set; } = 1;
+
+    /// <summary>The character using a team copy, or null when nobody has it equipped.</summary>
+    public Character? EquippedBy(GearItem item) => _characters.FirstOrDefault(c => c.Loadout.Contains(item));
 
     public Character CreateCharacter(string name)
     {

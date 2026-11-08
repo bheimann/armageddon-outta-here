@@ -24,4 +24,6 @@ public sealed class Armory
         _items.Add(item);
         return item;
     }
+
+    internal void AddLoaded(GearItem item) => _items.Add(item);
 }
