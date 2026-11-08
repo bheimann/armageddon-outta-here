@@ -51,7 +51,12 @@ player selects it (B or a shoulder button), then fires it with Y.
 
 ## Game structure
 
-- **Runs:** waves of wasteland threats attack the base. A break between waves is for repairs and spending scrap.
+- **Not a roguelike.** Levels are fixed, and everything players earn (scrap, suits, weapons, upgrades) is kept
+  for good. A "run" here just means one play of a level.
+- **Levels:** each level has its own spot to defend, such as a gas station, a radio tower or a school bus full of
+  survivors. Waves of enemies attack it, with a short break between waves for repairs.
+- **Winning:** survive the waves, then beat the boss that shows up at the end.
+- **Level order:** beating a level unlocks the next one. Players can replay any level they've beaten.
 - **Run length:** about 5 minutes at the starting levels, up to 10 minutes for harder ones.
 - **Enemies:** raccoons, zombies and aliens.
 - **Finding suits and weapons:** supply crates appear on the map during waves, and players have to go grab them.
@@ -90,6 +95,16 @@ Suits are found during runs, not built. They're made from junk, and each one pla
 - **Suits belong to the team.** Any player can use any suit the team has found.
 - **Up to 4 of each suit**, one per player, even when fewer than 4 people are playing. Finding a suit the team
   already has adds another copy, up to 4.
+- **A suit is equipped like a weapon.** It takes up one weapon slot (B, LB, RB, LT or RT) and is fired with Y.
+- **Suit levels:** upgrading a suit adds attacks. It always takes up one slot.
+
+  | Level | Slots | Attacks |
+  |---|---|---|
+  | 1 | 1 | 1 |
+  | 2 | 1 | 2 |
+  | 3 | 1 | 3 |
+  | 4 | 1 | 4 |
+
 - **Upgrades belong to each suit.** Each copy of a suit keeps its own upgrades.
 - **Weapons work the same way:** found during runs, shared by the team, up to 4 copies of each, and each copy
   keeps its own upgrades.

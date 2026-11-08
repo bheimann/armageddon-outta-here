@@ -7,7 +7,10 @@ against the end of the world in junkyard mech suits held together with duct tape
 
 - **Local co-op**: 1-4 players on the same screen.
 - **Defend the base**: hold off waves of wasteland threats.
-- **Unlockable mech suits**: scavenge scrap during runs to build new suits. Each suit plays differently.
+- **Unlockable mech suits**: find suits and weapons in supply crates, and spend scrap to upgrade them. Each suit
+  plays differently.
+
+See [docs/design.md](docs/design.md) for the full design.
 
 ## Suit ideas
 
