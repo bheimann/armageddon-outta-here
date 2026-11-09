@@ -282,6 +282,13 @@ public partial class Level : Node2D
             return;
         }
 
+        // Once the team has 4 of everything (counting crates already waiting), no more crates drop.
+        if (!SupplyCrate.HasAnythingLeft(Session.Save.Armory) || Crates.Count() >= MissingCopies())
+        {
+            _crateTimer = CrateEvery;
+            return;
+        }
+
         _crateTimer = CrateEvery;
         var spot = new Vector2(
             Mathf.Lerp(Arena.Position.X + 150, Arena.End.X - 150, (float)_random.NextDouble()),
@@ -297,20 +304,17 @@ public partial class Level : Node2D
 
     private void OpenCrate(Crate crate)
     {
-        var loot = SupplyCrate.Open(Session.Save.Armory, _random);
-        if (loot.Item is { } item)
+        if (SupplyCrate.Open(Session.Save.Armory, _random) is { } item)
         {
             Float(crate.GlobalPosition, $"Found: {item.Type.Name}!", Palette.Highlight, 26);
             _hud.Banner($"Found: {item.Type.Name}! Equip it at the workbench.");
             _finds.Add(item.Type.Name);
         }
-        else
-        {
-            _scrap.Share(loot.Scrap, Characters);
-            Float(crate.GlobalPosition, $"+{loot.Scrap} scrap", Palette.Highlight, 26);
-            _finds.Add($"{loot.Scrap} scrap");
-        }
     }
+
+    /// <summary>How many more copies the team could still find before it has 4 of everything.</summary>
+    private static int MissingCopies() =>
+        GearCatalog.Findable.Sum(t => Armory.MaxCopies - Session.Save.Armory.CopiesOf(t).Count());
 
     private readonly List<string> _finds = new();
 

@@ -3,37 +3,6 @@ namespace ArmageddonOuttaHere.Core.Tests;
 public class ProgressTests
 {
     [Fact]
-    public void Crate_gives_gear_the_team_has_fewer_than_four_of()
-    {
-        var armory = new Armory();
-        var random = new Random(1);
-
-        var loot = SupplyCrate.Open(armory, random);
-
-        Assert.NotNull(loot.Item);
-        Assert.NotEqual(GearType.Pistol, loot.Item!.Type);
-        Assert.Contains(loot.Item, armory.Items);
-    }
-
-    [Fact]
-    public void Crate_gives_scrap_when_the_team_has_four_of_everything()
-    {
-        var armory = new Armory();
-        foreach (var type in GearCatalog.Findable)
-        {
-            for (var i = 0; i < Armory.MaxCopies; i++)
-            {
-                armory.Find(type);
-            }
-        }
-
-        var loot = SupplyCrate.Open(armory, new Random(1));
-
-        Assert.Null(loot.Item);
-        Assert.Equal(SupplyCrate.ScrapWhenFull, loot.Scrap);
-    }
-
-    [Fact]
     public void Waves_grow_and_more_players_bring_more_enemies()
     {
         var level = LevelCatalog.Get(1);

@@ -68,6 +68,13 @@ and keep shooting the same way. Letting go of Y unlocks it. A dodge roll goes th
 - **The defended spot is solid:** shots can't pass through it, and players can't damage it. Only enemies can.
 - **Scrap drops:** scrap from enemies is split evenly between every player in the level.
 - **Finding suits and weapons:** supply crates appear on the map during waves, and players have to go grab them.
+  Crates favor gear the team has the fewest of:
+  1. An 80% chance of a random item the team has none of.
+  2. If not, an 80% chance of a random item it has 0 or 1 of.
+  3. Then 0 to 2, then 0 to 3, each with an 80% chance.
+  4. If none of those hit, a random item from everything the team has fewer than 4 of.
+
+  A step with nothing in it is skipped. Once the team has 4 of everything, no more crates drop.
 - **Downed players:** at 0 health a player is knocked down and stays down until a teammate revives them by
   standing next to them for about 2 seconds. There's no time limit. If every player is down, the run is lost.
 - **Losing a run:** players keep everything they collected: scrap, suits and weapons.
