@@ -40,6 +40,7 @@ public partial class LevelHud : Control
         }
 
         var size = GetViewportRect().Size;
+        DrawIncoming(size);
         DrawCrateArrows(size);
         DrawTop(size);
         for (var i = 0; i < Level.Mechs.Count; i++)
@@ -152,6 +153,55 @@ public partial class LevelHud : Control
         var finds = Level.Finds.Count == 0 ? "No crates opened" : "Found: " + string.Join(", ", Level.Finds);
         Text(finds, size / 2 + new Vector2(0, 40), 20, Palette.Highlight, center: true);
         Text("Back to the garage...  (A)", size / 2 + new Vector2(0, 90), 20, Palette.Disabled, center: true);
+    }
+
+    /// <summary>Red chevrons on the left and right edges counting the enemies coming from off screen on that side.</summary>
+    private void DrawIncoming(Vector2 size)
+    {
+        if (Level.State is LevelState.Won or LevelState.Lost)
+        {
+            return;
+        }
+
+        var toScreen = Level.GetViewport().GetCanvasTransform();
+        int left = 0, right = 0;
+        foreach (var enemy in GetTree().GetNodesInGroup(Enemy.Group).OfType<Enemy>())
+        {
+            var x = (toScreen * enemy.GlobalPosition).X;
+            if (x < 0)
+            {
+                left++;
+            }
+            else if (x > size.X)
+            {
+                right++;
+            }
+        }
+
+        var pulse = 0.6f + 0.4f * Mathf.Sin(Time.GetTicksMsec() / 120f);
+        var red = new Color(1f, 0.3f, 0.25f, pulse);
+        if (left > 0)
+        {
+            DrawChevrons(new Vector2(18, size.Y / 2), -1, red);
+            Text(left.ToString(), new Vector2(62, size.Y / 2 + 8), 22, red);
+        }
+
+        if (right > 0)
+        {
+            DrawChevrons(new Vector2(size.X - 18, size.Y / 2), 1, red);
+            Text(right.ToString(), new Vector2(size.X - 62, size.Y / 2 + 8), 22, red, alignRight: true);
+        }
+    }
+
+    private void DrawChevrons(Vector2 tip, int direction, Color color)
+    {
+        for (var i = 0; i < 2; i++)
+        {
+            var t = tip - new Vector2(direction * i * 14, 0);
+            var back = t - new Vector2(direction * 16, 0);
+            DrawPolyline(new[] { back + new Vector2(0, -18), t, back + new Vector2(0, 18) }, Palette.Ink, 9f);
+            DrawPolyline(new[] { back + new Vector2(0, -18), t, back + new Vector2(0, 18) }, color, 5f);
+        }
     }
 
     /// <summary>Arrows at the screen edge pointing to supply crates that are off screen.</summary>

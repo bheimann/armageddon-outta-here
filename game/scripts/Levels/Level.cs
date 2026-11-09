@@ -25,7 +25,8 @@ public enum LevelState
 /// </summary>
 public partial class Level : Node2D
 {
-    public static readonly Rect2 Arena = new(-1200, -750, 2400, 1500);
+    /// <summary>Wide and short, like a side-scroller stage: enemies mostly come from the left and right.</summary>
+    public static readonly Rect2 Arena = new(-1600, -460, 3200, 920);
 
     private const double IntroSeconds = 3;
     private const double BreakSeconds = 10;
@@ -201,7 +202,8 @@ public partial class Level : Node2D
         _spawnInterval = wave.SpawnSeconds / Mathf.Max(1, kinds.Count);
         _spawnTimer = 0;
         SetState(LevelState.Wave);
-        _hud.Banner($"Wave {WaveIndex + 1}");
+        MainSide = _random.Next(2) == 0 ? -1 : 1;
+        _hud.Banner($"Wave {WaveIndex + 1}: from the {(MainSide < 0 ? "left" : "right")}!");
     }
 
     private void SpawnFromQueue(double delta)
@@ -230,12 +232,13 @@ public partial class Level : Node2D
 
     private void SpawnBoss()
     {
+        MainSide = _random.Next(2) == 0 ? -1 : 1;
         _boss = new Boss
         {
             Kind = Info.Enemy,
             BossName = Info.Boss,
             PlayerCount = _mechs.Count,
-            Position = new Vector2(0, Arena.Position.Y + 120),
+            Position = new Vector2(MainSide < 0 ? Arena.Position.X + 120 : Arena.End.X - 120, 0),
             Target = _spot,
             Died = OnEnemyDied,
             Constrain = p => p.Clamp(Arena.Position, Arena.End),
@@ -248,20 +251,36 @@ public partial class Level : Node2D
             },
         };
         _world.AddChild(_boss);
-        _hud.Banner(Info.Boss + "!");
+        _hud.Banner($"{Info.Boss}, from the {(MainSide < 0 ? "left" : "right")}!");
     }
 
+    /// <summary>Share of enemies that come from the wave's main side (the rest of the side spawns use the other side).</summary>
+    private const double MainSideShare = 0.7;
+
+    /// <summary>Share of enemies that come in from the top or bottom edge, near the far ends.</summary>
+    private const double TopBottomShare = 0.1;
+
+    /// <summary>-1 when this wave mostly comes from the left, +1 from the right.</summary>
+    public int MainSide { get; private set; } = -1;
+
+    /// <summary>
+    /// Where an enemy enters, side-scroller style: most come from the left or right edge, mainly the wave's main
+    /// side; a few drop in from the top or bottom near the ends.
+    /// </summary>
     private Vector2 EdgePoint()
     {
-        var side = _random.Next(4);
+        var roll = _random.NextDouble();
         var t = (float)_random.NextDouble();
-        return side switch
+        if (roll < TopBottomShare)
         {
-            0 => new Vector2(Mathf.Lerp(Arena.Position.X, Arena.End.X, t), Arena.Position.Y),
-            1 => new Vector2(Mathf.Lerp(Arena.Position.X, Arena.End.X, t), Arena.End.Y),
-            2 => new Vector2(Arena.Position.X, Mathf.Lerp(Arena.Position.Y, Arena.End.Y, t)),
-            _ => new Vector2(Arena.End.X, Mathf.Lerp(Arena.Position.Y, Arena.End.Y, t)),
-        };
+            var side = _random.Next(2) == 0 ? MainSide : -MainSide;
+            var x = side * Mathf.Lerp(Arena.End.X * 0.6f, Arena.End.X, t);
+            return new Vector2(x, _random.Next(2) == 0 ? Arena.Position.Y : Arena.End.Y);
+        }
+
+        var fromMain = roll < TopBottomShare + (1 - TopBottomShare) * MainSideShare;
+        var edge = fromMain ? MainSide : -MainSide;
+        return new Vector2(edge < 0 ? Arena.Position.X : Arena.End.X, Mathf.Lerp(Arena.Position.Y + 40, Arena.End.Y - 40, t));
     }
 
     private bool EnemiesLeft() => GetTree().GetNodesInGroup(Enemy.Group).OfType<Enemy>().Any(e => e.IsAlive);
@@ -416,13 +435,26 @@ public partial class Level : Node2D
             .OrderBy(e => e.GlobalPosition.DistanceTo(mech.GlobalPosition))
             .FirstOrDefault();
         var down = _mechs.FirstOrDefault(m => m.IsDown);
-        var goal = down?.GlobalPosition ?? enemy?.GlobalPosition ?? _spot.GlobalPosition + new Vector2(0, 150);
+        // Each bot takes its own lane (spread up and down), so they don't stand in each other's line of fire.
+        var lane = new Vector2(0, (_mechs.IndexOf(mech) - (_mechs.Count - 1) / 2f) * 110f);
+        var goal = down?.GlobalPosition ?? (enemy is not null ? enemy.GlobalPosition + lane : _spot.GlobalPosition + new Vector2(0, 150) + lane);
         var to = goal - mech.GlobalPosition;
         var stopAt = down is not null ? 30f : enemy is not null ? 220f : 40f;
-        mech.Input.Move = to.Length() > stopAt ? to.Normalized() : enemy is not null ? to.Normalized() * 0.01f : Vector2.Zero;
+        var aim = enemy is not null ? (enemy.GlobalPosition - mech.GlobalPosition).Normalized() : Vector2.Zero;
+        mech.Input.Move = to.Length() > stopAt ? to.Normalized() : aim * 0.01f;
+        to = enemy is not null ? enemy.GlobalPosition - mech.GlobalPosition : to;
         // Aim locks while firing, so let go briefly to turn toward a target in a different direction.
         var aimedAtEnemy = enemy is not null && mech.Facing.AngleTo(to.Normalized()) is > -0.3f and < 0.3f;
-        mech.Input.AttackHeld = enemy is not null && down is null && aimedAtEnemy;
+        // Friendly fire is on, so hold fire while a teammate is in the line of fire.
+        var teammateInTheWay = enemy is not null && _mechs.Any(other =>
+            other != mech && other.IsAlive && InLineOfFire(mech.GlobalPosition, enemy.GlobalPosition, other.GlobalPosition));
+        mech.Input.AttackHeld = enemy is not null && down is null && aimedAtEnemy && !teammateInTheWay;
+    }
+
+    private static bool InLineOfFire(Vector2 from, Vector2 to, Vector2 point)
+    {
+        var closest = Geometry2D.GetClosestPointToSegment(point, from, to);
+        return closest.DistanceTo(point) < 40f && point.DistanceTo(from) < from.DistanceTo(to);
     }
 
     public override void _Draw()

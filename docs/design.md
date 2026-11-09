@@ -62,6 +62,11 @@ and keep shooting the same way. Letting go of Y unlocks it. A dodge roll goes th
 - **Winning:** survive the waves, then beat the boss that shows up at the end.
 - **Level order:** beating a level unlocks the next one. Players can replay any level they've beaten.
 - **Run length:** about 5 minutes at the starting levels, up to 10 minutes for harder ones.
+- **Side-scroller layout:** each level is a wide, short stage with the defended spot in the middle, and the
+  camera scrolls sideways with the players. Each wave picks a main side and announces it ("Wave 2: from the
+  left!"). About 70% of its enemies come from that side, 20% from the other side, and 10% drop in from the top or
+  bottom near the ends. The boss also enters from a side. Red markers on the left and right screen edges count
+  the enemies coming from off screen.
 - **Enemies:** raccoons, zombies and aliens. They go after players first: each one chases the nearest player it
   can see, and heads for the base when no player is near.
 - **Friendly fire:** players' shots hurt teammates. A bullet damages a teammate and keeps flying through them.
