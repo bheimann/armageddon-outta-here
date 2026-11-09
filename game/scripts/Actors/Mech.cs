@@ -154,7 +154,7 @@ public partial class Mech : Node2D, IHittable
 
         if (Input.PunchPressed && Ready(Attacks.Punch))
         {
-            Hittables.Blast(this, Position + Facing * 30f, Attacks.Punch.Radius, Attacks.Punch, ignore: this);
+            Hittables.Blast(this, Position + Facing * 30f, Attacks.Punch.Radius, Attacks.Punch, ignore: this, facing: Facing);
         }
         else if (Input.AttackHeld)
         {
@@ -201,7 +201,7 @@ public partial class Mech : Node2D, IHittable
                 break;
 
             case AttackForm.Nova:
-                Hittables.Blast(this, Position, spec.Radius, spec, ignore: this);
+                Hittables.Blast(this, Position, spec.Radius, spec, ignore: this, follow: this, facing: Facing);
                 break;
 
             case AttackForm.Dash:
@@ -323,6 +323,11 @@ public partial class Mech : Node2D, IHittable
         var body = new Vector2(0, -26f + lift);
         var fill = _hurtFlash > 0 ? Colors.White : color;
 
+        if (_dashLeft > 0 && _dash is not null)
+        {
+            DrawDash(_dash);
+        }
+
         DrawLine(new Vector2(-9, -12), new Vector2(-11, 0), outline, 6f);
         DrawLine(new Vector2(9, -12), new Vector2(11, 0), outline, 6f);
 
@@ -339,6 +344,34 @@ public partial class Mech : Node2D, IHittable
         }
 
         DrawName(-62);
+    }
+
+    /// <summary>
+    /// A charge: Lawnmower Larry mows with spinning blades; everything else leaves speed lines, and the Hover
+    /// Commander also fires its jets.
+    /// </summary>
+    private void DrawDash(AttackSpec dash)
+    {
+        if (dash.Visual == AttackVisual.Blades)
+        {
+            Blast.DrawSpinningBlades(this, dash.Radius + 10, (float)Time.GetTicksMsec() / 40f, 1f, dash.Color);
+            return;
+        }
+
+        var back = -Facing;
+        var across = Facing.Orthogonal();
+        for (var i = -1; i <= 1; i++)
+        {
+            var start = new Vector2(0, -26) + back * 26 + across * i * 12;
+            DrawLine(start, start + back * (40 - Mathf.Abs(i) * 12), dash.Color with { A = 0.8f }, 4f);
+        }
+
+        if (dash.Name == "Hover Boost")
+        {
+            var jet = new Vector2(0, -10) + back * 18;
+            DrawColoredPolygon(new[] { jet + across * 8, jet - across * 8, jet + back * 34 }, new Color(1f, 0.6f, 0.15f, 0.9f));
+            DrawColoredPolygon(new[] { jet + across * 4, jet - across * 4, jet + back * 20 }, new Color(1f, 0.95f, 0.6f));
+        }
     }
 
     private void DrawDown(Color color, Color outline)

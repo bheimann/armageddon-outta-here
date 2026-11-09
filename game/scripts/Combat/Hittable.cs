@@ -44,7 +44,8 @@ public static class Hittables
     /// when the knockback is negative). Hits teammates too (friendly fire), except <paramref name="ignore"/>.
     /// Healing blasts heal the team instead of hurting it.
     /// </summary>
-    public static void Blast(Node anyNode, Vector2 center, float radius, AttackSpec spec, IHittable? ignore, bool hurtsTeam = true)
+    public static void Blast(Node anyNode, Vector2 center, float radius, AttackSpec spec, IHittable? ignore,
+        bool hurtsTeam = true, Node2D? follow = null, Vector2? facing = null)
     {
         foreach (var target in Near(anyNode, center, radius).ToList())
         {
@@ -77,6 +78,17 @@ public static class Hittables
             GlobalPosition = center,
             Radius = radius,
             Tint = spec.Color,
+            Style = StyleFor(spec),
+            Follow = follow,
+            Facing = facing ?? Vector2.Right,
         });
     }
+
+    /// <summary>The look of a blast: the attack's own, or a shockwave for blasts and an explosion for everything else.</summary>
+    public static AttackVisual StyleFor(AttackSpec spec) => spec.Visual switch
+    {
+        AttackVisual.Auto or AttackVisual.Box or AttackVisual.Flame or AttackVisual.Laser or AttackVisual.Ice =>
+            spec.Form == AttackForm.Nova ? AttackVisual.Shockwave : AttackVisual.Explosion,
+        _ => spec.Visual,
+    };
 }

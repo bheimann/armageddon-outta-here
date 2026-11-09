@@ -77,6 +77,8 @@ godot --headless --path game res://scenes/level.tscn -- --players=2 --speed=8
 
 See `game/scripts/DevOptions.cs` for the full list. Pretend players in a level fight on their own.
 
+`res://scenes/effects_gallery.tscn` replays every attack visual side by side.
+
 ## Windows builds
 
 `.github/workflows/build.yml` builds the game on GitHub. Run it from the Actions tab for a test zip, or push a

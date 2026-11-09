@@ -44,7 +44,30 @@ public sealed record AttackSpec(
     float Knockback = 120f,
     float Slow = 0f,
     bool Pierce = false,
-    float Heal = 0f);
+    float Heal = 0f,
+    AttackVisual Visual = AttackVisual.Auto);
+
+/// <summary>How an attack looks, so blades read as blades and ice as ice, not just a flash.</summary>
+public enum AttackVisual
+{
+    /// <summary>Picked from the form: blasts are shockwaves, explosive shots and strikes are explosions.</summary>
+    Auto,
+    Blades,
+    Frost,
+    Slam,
+    Heal,
+    Pull,
+    Static,
+    Beam,
+    Lightning,
+    Shockwave,
+    Punch,
+    Explosion,
+    Flame,
+    Laser,
+    Ice,
+    Box,
+}
 
 public static class Attacks
 {
@@ -125,16 +148,42 @@ public static class Attacks
         },
     };
 
+    /// <summary>How each named attack looks.</summary>
+    private static readonly Dictionary<string, AttackVisual> Visuals = new()
+    {
+        ["Flamethrower"] = AttackVisual.Flame,
+        ["Grill Flames"] = AttackVisual.Flame,
+        ["Ray Gun"] = AttackVisual.Laser,
+        ["Probe Laser"] = AttackVisual.Laser,
+        ["Hover Blaster"] = AttackVisual.Laser,
+        ["Freezer Beam"] = AttackVisual.Ice,
+        ["Ice Cube Toss"] = AttackVisual.Frost,
+        ["Door Slam"] = AttackVisual.Slam,
+        ["Deep Freeze"] = AttackVisual.Frost,
+        ["Blade Spin"] = AttackVisual.Blades,
+        ["Mow Down"] = AttackVisual.Blades,
+        ["Turbo Mulch"] = AttackVisual.Blades,
+        ["Package Toss"] = AttackVisual.Box,
+        ["Junk Mail"] = AttackVisual.Box,
+        ["Bag Toss"] = AttackVisual.Box,
+        ["Cookout"] = AttackVisual.Heal,
+        ["Static Field"] = AttackVisual.Static,
+        ["Thunder Strike"] = AttackVisual.Lightning,
+        ["Tractor Beam"] = AttackVisual.Pull,
+        ["Abduct"] = AttackVisual.Beam,
+    };
+
     /// <summary>The attack for one slot button. Guns get stronger with each upgrade; suits get more attacks.</summary>
     public static AttackSpec For(GearItem item, int attack)
     {
         var specs = ByGear.TryGetValue(item.Type.Id, out var found) ? found : ByGear["pistol"];
         var spec = specs[Mathf.Clamp(attack, 0, specs.Length - 1)];
+        spec = spec with { Visual = Visuals.GetValueOrDefault(spec.Name, spec.Visual) };
         return item.Type.Kind == GearKind.Suit
             ? spec
             : spec with { Damage = spec.Damage * (1f + 0.25f * (item.Level - 1)) };
     }
 
     /// <summary>The punch on X. Every mech has it.</summary>
-    public static readonly AttackSpec Punch = new("Punch", AttackForm.Nova, 15, 0.4f, Colors.White, Radius: 45, Knockback: 260);
+    public static readonly AttackSpec Punch = new("Punch", AttackForm.Nova, 15, 0.4f, Colors.White, Radius: 45, Knockback: 260, Visual: AttackVisual.Punch);
 }

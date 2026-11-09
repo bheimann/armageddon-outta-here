@@ -109,8 +109,48 @@ public partial class Projectile : Node2D
         }
 
         var center = new Vector2(0, lift - (Spec.Form == AttackForm.Lob ? 0 : 20f));
-        DrawCircle(center, Spec.Size + 2, Spec.Color.Darkened(0.5f));
-        DrawCircle(center, Spec.Size, Spec.Color);
-        DrawCircle(center + new Vector2(-1, -1) * Spec.Size * 0.3f, Spec.Size * 0.4f, Spec.Color.Lightened(0.6f));
+        var age = (float)(_age / Spec.Life);
+        switch (Spec.Visual)
+        {
+            case AttackVisual.Flame:
+                // A puff of fire that grows and burns from yellow to red, then fades to smoke.
+                var fire = new Color(1f, 0.9f, 0.3f).Lerp(new Color(0.9f, 0.25f, 0.1f), age);
+                var size = Spec.Size * (0.5f + age);
+                DrawCircle(center, size, (age < 0.7f ? fire : new Color(0.35f, 0.3f, 0.3f)) with { A = 1 - age * 0.8f });
+                DrawCircle(center + new Vector2(0, -size * 0.3f), size * 0.5f, new Color(1f, 0.95f, 0.6f, 1 - age));
+                break;
+
+            case AttackVisual.Laser:
+                // A bright streak along the direction of travel.
+                var tail = center - Direction * 26;
+                DrawLine(tail, center, Spec.Color with { A = 0.5f }, Spec.Size * 2);
+                DrawLine(tail, center, Colors.White, Spec.Size * 0.7f);
+                break;
+
+            case AttackVisual.Ice:
+                // A spinning ice crystal.
+                DrawSetTransform(center, (float)_age * 12f, Vector2.One);
+                var s = Spec.Size + 2;
+                DrawColoredPolygon(new[] { new Vector2(0, -s), new Vector2(s * 0.6f, 0), new Vector2(0, s), new Vector2(-s * 0.6f, 0) }, Spec.Color);
+                DrawLine(new Vector2(0, -s), new Vector2(0, s), Colors.White, 1.5f);
+                DrawSetTransform(Vector2.Zero);
+                break;
+
+            case AttackVisual.Box:
+                // A tumbling parcel, letter or grocery bag.
+                DrawSetTransform(center, (float)_age * 8f, Vector2.One);
+                var half = Spec.Size;
+                DrawRect(new Rect2(-half - 2, -half - 2, half * 2 + 4, half * 2 + 4), Palette.Ink);
+                DrawRect(new Rect2(-half, -half, half * 2, half * 2), Spec.Color);
+                DrawLine(new Vector2(-half, 0), new Vector2(half, 0), Spec.Color.Darkened(0.4f), 2f);
+                DrawSetTransform(Vector2.Zero);
+                break;
+
+            default:
+                DrawCircle(center, Spec.Size + 2, Spec.Color.Darkened(0.5f));
+                DrawCircle(center, Spec.Size, Spec.Color);
+                DrawCircle(center + new Vector2(-1, -1) * Spec.Size * 0.3f, Spec.Size * 0.4f, Spec.Color.Lightened(0.6f));
+                break;
+        }
     }
 }
