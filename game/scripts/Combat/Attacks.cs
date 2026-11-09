@@ -26,7 +26,8 @@ public enum AttackForm
 }
 
 /// <summary>
-/// What one attack does. Guns have one; suits have one per level. Placeholder numbers until balancing.
+/// What one attack does. Guns have one; suits have one per level. Placeholder numbers until balancing, and the
+/// suits themselves are placeholders that will probably be replaced.
 /// </summary>
 public sealed record AttackSpec(
     string Name,

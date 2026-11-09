@@ -116,6 +116,9 @@ duct tape to high-tech suits: military prototypes left behind in the chaos, and 
 - **Gun upgrades** make a gun hit harder (25% more damage per level). **Suit upgrades** add an attack and take
   another slot, so a suit can only be upgraded when there's a free slot.
 
+**Placeholder suits.** These are in the game so the loadout and upgrades can be tested, but they'll probably be
+replaced with the final suits later.
+
 | Suit | Tech | Role |
 |---|---|---|
 | The Fridge | Junk | Slow tank with a freezer beam |
