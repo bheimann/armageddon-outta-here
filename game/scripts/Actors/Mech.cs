@@ -23,6 +23,7 @@ public partial class Mech : Node2D, IHittable
     private readonly Dictionary<AttackSpec, double> _cooldowns = new();
     private readonly HashSet<IHittable> _dashHits = new();
     private double _rollLeft;
+    private Vector2 _rollDirection = Vector2.Down;
     private double _rollCooldownLeft;
     private double _dashLeft;
     private AttackSpec? _dash;
@@ -90,7 +91,10 @@ public partial class Mech : Node2D, IHittable
             return;
         }
 
-        if (Input.Move != Vector2.Zero)
+        // Aim locks while Y is held: once you start firing you keep shooting the same way, even while moving
+        // (strafing). Let go of Y and the mech turns to face where it moves again.
+        var aimLocked = CanFight && Input.AttackHeld;
+        if (Input.Move != Vector2.Zero && !aimLocked)
         {
             Facing = Input.Move.Normalized();
         }
@@ -106,7 +110,7 @@ public partial class Mech : Node2D, IHittable
         else if (IsRolling)
         {
             _rollLeft -= delta;
-            velocity = Facing * RollSpeed;
+            velocity = _rollDirection * RollSpeed;
         }
         else
         {
@@ -138,6 +142,7 @@ public partial class Mech : Node2D, IHittable
         if (Input.RollPressed && _rollCooldownLeft <= 0)
         {
             _rollLeft = RollTime;
+            _rollDirection = Input.Move != Vector2.Zero ? Input.Move.Normalized() : Facing;
             _rollCooldownLeft = RollCooldown;
             return;
         }

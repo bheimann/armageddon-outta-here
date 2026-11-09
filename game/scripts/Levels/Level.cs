@@ -400,7 +400,9 @@ public partial class Level : Node2D
         var to = goal - mech.GlobalPosition;
         var stopAt = down is not null ? 30f : enemy is not null ? 220f : 40f;
         mech.Input.Move = to.Length() > stopAt ? to.Normalized() : enemy is not null ? to.Normalized() * 0.01f : Vector2.Zero;
-        mech.Input.AttackHeld = enemy is not null && down is null;
+        // Aim locks while firing, so let go briefly to turn toward a target in a different direction.
+        var aimedAtEnemy = enemy is not null && mech.Facing.AngleTo(to.Normalized()) is > -0.3f and < 0.3f;
+        mech.Input.AttackHeld = enemy is not null && down is null && aimedAtEnemy;
     }
 
     public override void _Draw()

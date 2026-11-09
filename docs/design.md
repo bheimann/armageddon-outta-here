@@ -30,6 +30,9 @@ The same layout as Deadtime Defenders, on an Xbox-style controller (we play on L
 Players aim in whichever direction they're facing. There's no right-stick aiming. To attack or use an ability, a
 player selects it with its slot button, then fires it with Y. See [Loadout](#loadout).
 
+**Aim lock:** while Y is held, the aim stays locked in the direction the player started firing, so they can move
+and keep shooting the same way. Letting go of Y unlocks it. A dodge roll goes the way the stick is pushed.
+
 **In menus**
 
 | Button | Action |
@@ -132,6 +135,36 @@ replaced with the final suits later.
 | Prototype X-9 "Sparky" | High tech | A military prototype that chains lightning between enemies |
 | The Hover Commander | High tech | Hovers over obstacles and calls in drone strikes |
 | Probe Reverser | Alien tech | A salvaged alien suit with a tractor beam that throws enemies around |
+
+### Suit attacks
+
+Each suit level unlocks the next attack, on its own slot button: level 1 has attack 1, level 4 has all four.
+
+| Suit | Level 1 | Level 2 | Level 3 | Level 4 |
+|---|---|---|---|---|
+| The Fridge | **Freezer Beam:** a steady icy stream that slows enemies | **Ice Cube Toss:** a lobbed ice block that bursts and slows | **Door Slam:** a blast around the suit that knocks enemies back | **Deep Freeze:** a huge blast that nearly freezes everything nearby |
+| Lawnmower Larry | **Blade Spin:** spinning blades hit everything close | **Grass Clippings:** a spray of 5 clippings | **Mow Down:** charges forward through enemies | **Turbo Mulch:** a big spinning blast |
+| Mailbox Mk II | **Package Toss:** a lobbed package that explodes | **Junk Mail:** 3 letters fired in a spread | **Express Delivery:** explosions dropped on the 3 nearest enemies | **Return to Sender:** a blast that throws enemies far away |
+| Grill Sergeant | **Grill Flames:** a short-range flamethrower | **Hot Dog Launcher:** fires hot dogs | **Cookout:** heals every teammate nearby | **Charcoal Bomb:** a lobbed bomb with a big blast |
+| The Shopping Cart | **Ram:** a quick charge that knocks enemies away | **Bag Toss:** throws grocery bags | **Runaway Cart:** a long, hard-hitting charge | **Clean Up Aisle 5:** a big blast around the cart |
+| Prototype X-9 "Sparky" | **Zap:** lightning that jumps between 3 enemies | **Static Field:** a blast that slows enemies nearby | **Overcharge:** lightning that jumps between 7 enemies | **Thunder Strike:** lightning bolts on the 4 nearest enemies |
+| The Hover Commander | **Hover Blaster:** fast laser shots | **Drone Strike:** explosions on the 2 nearest enemies | **Hover Boost:** a quick charge forward | **Air Raid:** explosions on the 6 nearest enemies |
+| Probe Reverser | **Tractor Beam:** pulls enemies in toward the suit | **Probe Laser:** a laser that goes through enemies | **Abduct:** a strong blast up close | **Saucer Slam:** a lobbed saucer with a huge blast |
+
+### Guns
+
+Upgrading a gun makes it hit harder (25% more damage per level).
+
+| Gun | Slots | What it does |
+|---|---|---|
+| Pistol | 1 | Single shots. Every character starts with one |
+| Nail Gun | 1 | Fast, slightly scattered nails |
+| Shotgun | 1 | 6 pellets in a short-range spread |
+| Ray Gun | 1 | Alien shots that go through enemies |
+| Minigun | 2 | A very fast stream of bullets |
+| RPG | 2 | A rocket that explodes on the first enemy it hits |
+| Grenade Launcher | 2 | A lobbed grenade that explodes where it lands |
+| Flamethrower | 2 | A short-range stream of fire that goes through enemies |
 
 ## Loadout
 
