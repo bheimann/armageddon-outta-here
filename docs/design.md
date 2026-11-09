@@ -62,6 +62,7 @@ player selects it with its slot button, then fires it with Y. See [Loadout](#loa
 - **Enemies:** raccoons, zombies and aliens. They go after players first: each one chases the nearest player it
   can see, and heads for the base when no player is near.
 - **Friendly fire:** players' shots hurt teammates. A bullet damages a teammate and keeps flying through them.
+- **The defended spot is solid:** shots can't pass through it, and players can't damage it. Only enemies can.
 - **Scrap drops:** scrap from enemies is split evenly between every player in the level.
 - **Finding suits and weapons:** supply crates appear on the map during waves, and players have to go grab them.
 - **Downed players:** at 0 health a player is knocked down and stays down until a teammate revives them by
@@ -108,6 +109,8 @@ duct tape to high-tech suits: military prototypes left behind in the chaos, and 
 - **Upgrades belong to each suit.** Each copy of a suit keeps its own upgrades.
 - **Weapons work the same way:** found during runs, shared by the team, up to 4 copies of each, and each copy
   keeps its own upgrades.
+- **One of each item per player.** A player can't equip two copies of the same suit or gun, so one person can't
+  take all 4 Grill Sergeants.
 - **Only equipped gear can be upgraded.** At the workbench, a player can only upgrade the suit and weapons they
   have equipped, using their own character's scrap.
 - **Every character starts with a pistol.** It's free and doesn't count against the team's 4 copies, so nobody

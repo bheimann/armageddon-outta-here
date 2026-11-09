@@ -61,6 +61,14 @@ public partial class Session : Node
             Engine.MaxPhysicsStepsPerFrame = 8 * Dev.Speed;
         }
 
+        if (Dev.AllGear)
+        {
+            foreach (var type in GearCatalog.Findable)
+            {
+                Save.Armory.Find(type);
+            }
+        }
+
         if (Dev.Level > 0)
         {
             CurrentLevel = Dev.Level;

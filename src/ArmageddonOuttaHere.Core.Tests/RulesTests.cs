@@ -63,10 +63,21 @@ public class RulesTests
     public void Heavy_guns_take_two_slots_and_the_loadout_holds_five()
     {
         Assert.True(_save.Equip(First, _save.Armory.Find(Minigun)!));
-        Assert.True(_save.Equip(First, _save.Armory.Find(Minigun)!));
+        Assert.True(_save.Equip(First, _save.Armory.Find(GearCatalog.Rpg)!));
 
         Assert.Equal(5, First.Loadout.SlotsUsed);
         Assert.False(_save.Equip(First, _save.Armory.Find(NailGun)!));
+    }
+
+    [Fact]
+    public void Nobody_can_equip_two_of_the_same_item()
+    {
+        var first = _save.Armory.Find(GearCatalog.GrillSergeant)!;
+        var second = _save.Armory.Find(GearCatalog.GrillSergeant)!;
+
+        Assert.True(_save.Equip(First, first));
+        Assert.False(_save.Equip(First, second));
+        Assert.True(_save.Equip(_save.Characters[1], second));
     }
 
     [Fact]
@@ -143,8 +154,8 @@ public class RulesTests
     public void Suit_upgrade_needs_a_free_slot()
     {
         _save.Equip(First, _save.Armory.Find(NailGun)!);
-        _save.Equip(First, _save.Armory.Find(NailGun)!);
-        _save.Equip(First, _save.Armory.Find(NailGun)!);
+        _save.Equip(First, _save.Armory.Find(GearCatalog.Shotgun)!);
+        _save.Equip(First, _save.Armory.Find(GearCatalog.RayGun)!);
         var fridge = _save.Armory.Find(Fridge)!;
         _save.Equip(First, fridge);
         First.AddScrap(1000);

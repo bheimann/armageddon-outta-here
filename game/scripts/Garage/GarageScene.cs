@@ -321,15 +321,21 @@ public partial class GarageScene : Node2D
             var items = gear
                 .OrderBy(i => i.Type.Kind)
                 .ThenBy(i => i.Type.Name)
-                .Select(item => new MenuItem(Describe(item), () =>
+                .Select(item =>
                 {
-                    if (Session.Save.Equip(character, item))
+                    var duplicate = SaveGame.HasSameKind(character, item);
+                    var fits = item.Slots <= character.Loadout.FreeSlots;
+                    var note = duplicate ? "  (already equipped)" : fits ? string.Empty : "  (no room)";
+                    return new MenuItem(Describe(item) + note, () =>
                     {
-                        pane.Say($"Equipped {item.Type.Name}");
-                        Session.SaveNow();
-                        pane.Close();
-                    }
-                }, Enabled: item.Slots <= character.Loadout.FreeSlots))
+                        if (Session.Save.Equip(character, item))
+                        {
+                            pane.Say($"Equipped {item.Type.Name}");
+                            Session.SaveNow();
+                            pane.Close();
+                        }
+                    }, Enabled: fits && !duplicate);
+                })
                 .ToList();
             if (items.Count == 0)
             {
@@ -460,5 +466,9 @@ public partial class GarageScene : Node2D
             _ => StationKind.Workbench,
         };
         OpenStation(pane, kind);
+        if (open == "equip")
+        {
+            pane.Open(EquipMenu(pane, pane.Player!.Character));
+        }
     }
 }

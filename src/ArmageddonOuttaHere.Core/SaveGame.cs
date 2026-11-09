@@ -56,7 +56,8 @@ public sealed class SaveGame
     public bool Equip(Character character, GearItem item)
     {
         var owned = Armory.Items.Contains(item) || item == character.Starter;
-        if (!owned || EquippedBy(item) is not null || !character.Loadout.CanFit(item.Slots))
+        if (!owned || EquippedBy(item) is not null || !character.Loadout.CanFit(item.Slots)
+            || HasSameKind(character, item))
         {
             return false;
         }
@@ -64,6 +65,10 @@ public sealed class SaveGame
         character.Loadout.Add(item);
         return true;
     }
+
+    /// <summary>True when the character already has one of these equipped. Nobody can equip two of the same item.</summary>
+    public static bool HasSameKind(Character character, GearItem item) =>
+        character.Loadout.Items.Any(i => i.Type == item.Type);
 
     /// <summary>What a character could put in their loadout: their own pistol and the team's free copies.</summary>
     public IEnumerable<GearItem> Equippable(Character character) =>

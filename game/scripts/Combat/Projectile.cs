@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using ArmageddonOuttaHere.Actors;
 using Godot;
 
 namespace ArmageddonOuttaHere.Combat;
@@ -57,6 +58,22 @@ public partial class Projectile : Node2D
                 continue;
             }
 
+            // The defended spot is solid: every shot stops on it. Only enemy shots damage it.
+            if (target is DefendedSpot spot)
+            {
+                if (FromEnemy)
+                {
+                    spot.Hit(new Hit(Spec.Damage, Vector2.Zero));
+                }
+                else if (Spec.Radius > 0)
+                {
+                    Explode();
+                }
+
+                QueueFree();
+                return;
+            }
+
             if (Spec.Radius > 0 && !target.IsTeam)
             {
                 Explode();
@@ -65,7 +82,7 @@ public partial class Projectile : Node2D
             }
 
             _alreadyHit.Add(target);
-            target.Hit(new Hit(Spec.Damage, Direction * Spec.Knockback, Spec.Slow));
+            target.Hit(new Hit(Spec.Damage, Direction * Spec.Knockback, Spec.Slow, ByTeam: !FromEnemy));
 
             // Shots stop on enemies (unless they pierce) but pass through teammates after hurting them.
             if (!target.IsTeam && !Spec.Pierce)

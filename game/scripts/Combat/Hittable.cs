@@ -23,7 +23,8 @@ public interface IHittable
 }
 
 /// <summary>One hit landing on something.</summary>
-public readonly record struct Hit(float Damage, Vector2 Push, float Slow = 0f, float Heal = 0f);
+/// <remarks><paramref name="ByTeam"/> is true for damage from players (shots, blasts, dashes, punches).</remarks>
+public readonly record struct Hit(float Damage, Vector2 Push, float Slow = 0f, float Heal = 0f, bool ByTeam = false);
 
 public static class Hittables
 {
@@ -68,7 +69,7 @@ public static class Hittables
                 continue;
             }
 
-            target.Hit(new Hit(spec.Damage, away * spec.Knockback, spec.Slow));
+            target.Hit(new Hit(spec.Damage, away * spec.Knockback, spec.Slow, ByTeam: true));
         }
 
         WorldOf(anyNode).AddChild(new Blast

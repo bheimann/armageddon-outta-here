@@ -78,35 +78,92 @@ public sealed class Menu : IPanel
         _index = items.Count == 0 ? 0 : Mathf.Clamp(_index, 0, items.Count - 1);
         var subtitle = Subtitle?.Invoke();
         const int lineHeight = 30;
-        var width = Mathf.Min(area.Size.X - 40, 520);
-        var height = 70 + (subtitle is null ? 0 : 26) + items.Count * lineHeight + 30;
+        var header = 52 + (subtitle is null ? 0 : 26);
+        const int footer = 34;
+
+        // Long lists turn into a spinner: an odd number of rows with the selected item always in the middle.
+        const int maxRows = 9;
+        var fits = Mathf.Clamp((int)((area.Size.Y - 40 - header - footer) / lineHeight), 3, maxRows);
+        var spinner = items.Count > fits;
+        var rows = spinner ? (fits % 2 == 1 ? fits : fits - 1) : items.Count;
+
+        var width = Mathf.Min(area.Size.X - 40, 560);
+        var height = header + rows * lineHeight + footer;
         var box = new Rect2(area.Position + (area.Size - new Vector2(width, height)) / 2, new Vector2(width, height));
         Ui.Box(canvas, box);
 
-        var y = box.Position.Y + 40;
-        Ui.Text(canvas, Title, new Vector2(box.Position.X + 20, y), 26, Palette.Highlight);
+        Ui.Text(canvas, Title, new Vector2(box.Position.X + 20, box.Position.Y + 40), 26, Palette.Highlight);
         if (subtitle is not null)
         {
-            y += 26;
-            Ui.Text(canvas, subtitle, new Vector2(box.Position.X + 20, y), 16, Colors.LightGray);
+            Ui.Text(canvas, subtitle, new Vector2(box.Position.X + 20, box.Position.Y + 66), 16, Colors.LightGray);
         }
 
-        y += 12;
-        for (var i = 0; i < items.Count; i++)
+        var listTop = box.Position.Y + header;
+        if (spinner)
         {
-            y += lineHeight;
-            var selected = i == _index;
-            var color = !items[i].Enabled ? Palette.Disabled : selected ? Colors.White : Colors.LightGray;
-            if (selected)
+            DrawSpinner(canvas, items, box, listTop, rows, lineHeight);
+        }
+        else
+        {
+            _scroll = _index;
+            for (var i = 0; i < items.Count; i++)
             {
-                canvas.DrawRect(new Rect2(box.Position.X + 10, y - 22, width - 20, 28), new Color(1, 1, 1, 0.08f));
-                Ui.Text(canvas, ">", new Vector2(box.Position.X + 16, y), 20, Palette.Highlight);
+                DrawRow(canvas, items[i], i == _index, box, listTop + (i + 1) * lineHeight, 1f);
             }
-
-            Ui.Text(canvas, items[i].Text, new Vector2(box.Position.X + 38, y), 19, color);
         }
 
         Ui.Text(canvas, "A: select    B: back", new Vector2(box.Position.X + 20, box.End.Y - 12), 13, Palette.Disabled);
+    }
+
+    /// <summary>How far the spinner has scrolled; slides toward the selected item so the list visibly shifts.</summary>
+    private float _scroll;
+
+    private void DrawSpinner(Control canvas, IReadOnlyList<MenuItem> items, Rect2 box, float listTop, int rows, int lineHeight)
+    {
+        // Snap on big jumps (wrapping from the bottom to the top), slide on single steps.
+        _scroll = Mathf.Abs(_scroll - _index) > 2 ? _index : Mathf.Lerp(_scroll, _index, 0.3f);
+        var half = rows / 2;
+        var centerY = listTop + (half + 1) * lineHeight;
+
+        // The selection bar stays put in the middle; the items move past it.
+        canvas.DrawRect(new Rect2(box.Position.X + 10, centerY - 22, box.Size.X - 20, 28), new Color(1, 1, 1, 0.08f));
+        Ui.Text(canvas, ">", new Vector2(box.Position.X + 16, centerY), 20, Palette.Highlight);
+
+        for (var i = 0; i < items.Count; i++)
+        {
+            var offset = i - _scroll;
+            if (Mathf.Abs(offset) > half + 0.5f)
+            {
+                continue;
+            }
+
+            var fade = 1f - Mathf.Abs(offset) / (half + 1) * 0.7f;
+            DrawRow(canvas, items[i], i == _index, box, centerY + offset * lineHeight, fade, marker: false);
+        }
+
+        if (_index > half)
+        {
+            Ui.Text(canvas, "▲", new Vector2(box.End.X - 30, listTop + lineHeight - 4), 16, Palette.Disabled);
+        }
+
+        if (_index < items.Count - 1 - half)
+        {
+            Ui.Text(canvas, "▼", new Vector2(box.End.X - 30, listTop + rows * lineHeight), 16, Palette.Disabled);
+        }
+
+        Ui.Text(canvas, $"{_index + 1} / {items.Count}", new Vector2(box.End.X - 20, box.End.Y - 12), 13, Palette.Disabled, right: true);
+    }
+
+    private static void DrawRow(Control canvas, MenuItem item, bool selected, Rect2 box, float y, float alpha, bool marker = true)
+    {
+        var color = !item.Enabled ? Palette.Disabled : selected ? Colors.White : Colors.LightGray;
+        if (selected && marker)
+        {
+            canvas.DrawRect(new Rect2(box.Position.X + 10, y - 22, box.Size.X - 20, 28), new Color(1, 1, 1, 0.08f));
+            Ui.Text(canvas, ">", new Vector2(box.Position.X + 16, y), 20, Palette.Highlight);
+        }
+
+        Ui.Text(canvas, item.Text, new Vector2(box.Position.X + 38, y), 19, color with { A = alpha });
     }
 }
 

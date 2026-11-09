@@ -237,7 +237,7 @@ public partial class Mech : Node2D, IHittable
             }
 
             hit.Add(next);
-            next.Hit(new Hit(spec.Damage, (next.GlobalPosition - from).Normalized() * spec.Knockback, spec.Slow));
+            next.Hit(new Hit(spec.Damage, (next.GlobalPosition - from).Normalized() * spec.Knockback, spec.Slow, ByTeam: true));
             Hittables.WorldOf(this).AddChild(new Bolt { From = from, To = next.GlobalPosition, Tint = spec.Color });
             from = next.GlobalPosition;
         }
@@ -249,7 +249,7 @@ public partial class Mech : Node2D, IHittable
         {
             if (target != this && _dashHits.Add(target))
             {
-                target.Hit(new Hit(_dash.Damage, Facing * _dash.Knockback, _dash.Slow));
+                target.Hit(new Hit(_dash.Damage, Facing * _dash.Knockback, _dash.Slow, ByTeam: true));
             }
         }
     }

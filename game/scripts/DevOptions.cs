@@ -27,6 +27,9 @@ public sealed class DevOptions
 
     public string? Open { get; init; }
 
+    /// <summary><c>--allgear</c>: the team finds one of every gun and suit (to see long lists).</summary>
+    public bool AllGear { get; init; }
+
     /// <summary><c>--level=N</c>: which level the level scene plays when started directly.</summary>
     public int Level { get; init; }
 
@@ -51,6 +54,7 @@ public sealed class DevOptions
             Wave = IntValue("wave", 1),
             Open = Value("open"),
             Level = IntValue("level", 0),
+            AllGear = args.Contains("--allgear"),
             Speed = Mathf.Clamp(IntValue("speed", 1), 1, 8),
         };
     }

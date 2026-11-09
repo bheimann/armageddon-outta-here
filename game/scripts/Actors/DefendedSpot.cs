@@ -48,7 +48,8 @@ public partial class DefendedSpot : Node2D, IHittable
 
     public void Hit(Hit hit)
     {
-        if (!IsAlive || hit.Damage <= 0)
+        // Players can never damage the spot they are defending.
+        if (!IsAlive || hit.Damage <= 0 || hit.ByTeam)
         {
             return;
         }
