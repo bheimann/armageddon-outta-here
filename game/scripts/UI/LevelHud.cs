@@ -40,6 +40,7 @@ public partial class LevelHud : Control
         }
 
         var size = GetViewportRect().Size;
+        DrawCrateArrows(size);
         DrawTop(size);
         for (var i = 0; i < Level.Mechs.Count; i++)
         {
@@ -73,8 +74,19 @@ public partial class LevelHud : Control
         };
         Text(line, new Vector2(mid, 34), 26, Colors.White, center: true);
 
-        Bar(new Rect2(mid - 160, 46, 320, 14), Level.Spot.Health / DefendedSpot.MaxHealth, new Color(0.4f, 0.7f, 1f));
-        Text($"{info.Spot}", new Vector2(mid, 78), 16, Colors.White, center: true);
+        var flash = Level.Spot.UnderAttack && Time.GetTicksMsec() / 250 % 2 == 0;
+        var barRect = new Rect2(mid - 160, 46, 320, 14);
+        Bar(barRect, Level.Spot.Health / DefendedSpot.MaxHealth, flash ? new Color(1f, 0.35f, 0.3f) : new Color(0.4f, 0.7f, 1f));
+        if (Level.Spot.UnderAttack)
+        {
+            DrawRect(barRect.Grow(4), new Color(1f, 0.3f, 0.25f), false, 3f);
+            Text($"The {info.Spot.ToLower()} is under attack!", new Vector2(mid, 80), 20,
+                flash ? new Color(1f, 0.4f, 0.35f) : Colors.White, center: true);
+        }
+        else
+        {
+            Text($"{info.Spot}", new Vector2(mid, 78), 16, Colors.White, center: true);
+        }
 
         if (Level.CurrentBoss is { } boss)
         {
@@ -137,7 +149,43 @@ public partial class LevelHud : Control
             won ? Palette.Highlight : new Color(1f, 0.45f, 0.4f), center: true);
         var next = won && Level.Info.Number < LevelCatalog.All.Count ? $"Level {Level.Info.Number + 1} unlocked. " : string.Empty;
         Text(next + "Everyone keeps their scrap and finds.", size / 2, 24, Colors.White, center: true);
-        Text("Back to the garage...  (A)", size / 2 + new Vector2(0, 50), 20, Palette.Disabled, center: true);
+        var finds = Level.Finds.Count == 0 ? "No crates opened" : "Found: " + string.Join(", ", Level.Finds);
+        Text(finds, size / 2 + new Vector2(0, 40), 20, Palette.Highlight, center: true);
+        Text("Back to the garage...  (A)", size / 2 + new Vector2(0, 90), 20, Palette.Disabled, center: true);
+    }
+
+    /// <summary>Arrows at the screen edge pointing to supply crates that are off screen.</summary>
+    private void DrawCrateArrows(Vector2 size)
+    {
+        if (Level.State is LevelState.Won or LevelState.Lost)
+        {
+            return;
+        }
+
+        var toScreen = Level.GetViewport().GetCanvasTransform();
+        var center = size / 2;
+        var inner = new Rect2(Vector2.Zero, size).Grow(-40);
+        var pulse = 0.75f + 0.25f * Mathf.Sin(Time.GetTicksMsec() / 150f);
+        foreach (var crate in Level.Crates)
+        {
+            var at = toScreen * crate.GlobalPosition;
+            if (inner.HasPoint(at))
+            {
+                continue;
+            }
+
+            // Where the line from the middle of the screen to the crate crosses the screen edge.
+            var direction = (at - center).Normalized();
+            var scale = Mathf.Min(
+                Mathf.Abs(direction.X) > 0.001f ? (inner.Size.X / 2) / Mathf.Abs(direction.X) : float.MaxValue,
+                Mathf.Abs(direction.Y) > 0.001f ? (inner.Size.Y / 2) / Mathf.Abs(direction.Y) : float.MaxValue);
+            var tip = center + direction * scale;
+            var side = direction.Orthogonal() * 14 * pulse;
+            var back = tip - direction * 30 * pulse;
+            DrawColoredPolygon(new[] { tip + direction * 4, back + side * 1.2f, back - side * 1.2f }, Palette.Ink);
+            DrawColoredPolygon(new[] { tip, back + side, back - side }, Palette.Highlight);
+            Text("Crate", back - direction * 22 + new Vector2(0, 6), 14, Palette.Highlight, center: true);
+        }
     }
 
     private void Bar(Rect2 rect, float fraction, Color color)

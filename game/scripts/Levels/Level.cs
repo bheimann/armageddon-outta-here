@@ -302,13 +302,23 @@ public partial class Level : Node2D
         {
             Float(crate.GlobalPosition, $"Found: {item.Type.Name}!", Palette.Highlight, 26);
             _hud.Banner($"Found: {item.Type.Name}! Equip it at the workbench.");
+            _finds.Add(item.Type.Name);
         }
         else
         {
             _scrap.Share(loot.Scrap, Characters);
             Float(crate.GlobalPosition, $"+{loot.Scrap} scrap", Palette.Highlight, 26);
+            _finds.Add($"{loot.Scrap} scrap");
         }
     }
+
+    private readonly List<string> _finds = new();
+
+    /// <summary>Everything found in crates this level, for the end screen.</summary>
+    public IReadOnlyList<string> Finds => _finds;
+
+    /// <summary>Crates still waiting on the ground (the HUD points arrows at them).</summary>
+    public IEnumerable<Crate> Crates => GetTree().GetNodesInGroup(Crate.Group).OfType<Crate>();
 
     private void Revive(double delta)
     {
@@ -335,6 +345,12 @@ public partial class Level : Node2D
 
     private void Win()
     {
+        // Crates nobody reached are picked up for the team automatically.
+        foreach (var crate in Crates.ToList())
+        {
+            crate.Open();
+        }
+
         SetState(LevelState.Won);
         Session.Save.LevelBeaten(Info.Number);
         Session.SaveNow();

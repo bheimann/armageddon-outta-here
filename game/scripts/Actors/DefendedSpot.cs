@@ -22,6 +22,12 @@ public partial class DefendedSpot : Node2D, IHittable
 
     private double _hurtFlash;
 
+    /// <summary>Seconds since an enemy last hit it (for the "under attack" warning).</summary>
+    public double SinceHit { get; private set; } = 99;
+
+    /// <summary>True for a couple of seconds after each hit.</summary>
+    public bool UnderAttack => SinceHit < 2.5;
+
     public string Spot { get; init; } = "Gas station";
 
     public float Health { get; private set; } = MaxHealth;
@@ -43,6 +49,7 @@ public partial class DefendedSpot : Node2D, IHittable
     public override void _Process(double delta)
     {
         _hurtFlash -= delta;
+        SinceHit += delta;
         QueueRedraw();
     }
 
@@ -56,6 +63,7 @@ public partial class DefendedSpot : Node2D, IHittable
 
         Health = Mathf.Max(0, Health - hit.Damage);
         _hurtFlash = 0.1;
+        SinceHit = 0;
     }
 
     public void Repair(float amount) => Health = Mathf.Min(MaxHealth, Health + amount);
@@ -78,6 +86,15 @@ public partial class DefendedSpot : Node2D, IHittable
             default:
                 DrawGasStation(flash);
                 break;
+        }
+
+        if (UnderAttack && Time.GetTicksMsec() / 250 % 2 == 0)
+        {
+            // A flashing warning sign over the spot while enemies are hitting it.
+            var top = new Vector2(0, Spot == "Radio tower" ? -250 : -160);
+            DrawCircle(top, 22, Palette.Ink);
+            DrawCircle(top, 19, new Color(0.95f, 0.25f, 0.2f));
+            UI.Ui.Text(this, "!", top + new Vector2(0, 10), 30, Colors.White, center: true);
         }
 
         if (BeingRepaired)

@@ -10,8 +10,14 @@ public partial class Crate : Node2D
     private const float PickupRange = 40f;
     private double _age;
 
-    /// <summary>Called once when a mech reaches the crate.</summary>
+    public const string Group = "crates";
+
+    private bool _opened;
+
+    /// <summary>Called once when a mech reaches the crate (or the level ends with it unopened).</summary>
     public Action<Crate>? Opened { get; set; }
+
+    public override void _Ready() => AddToGroup(Group);
 
     public override void _PhysicsProcess(double delta)
     {
@@ -20,11 +26,23 @@ public partial class Crate : Node2D
             .FirstOrDefault(m => m.IsAlive && m.GlobalPosition.DistanceTo(GlobalPosition) <= PickupRange);
         if (mech is not null)
         {
-            Opened?.Invoke(this);
-            QueueFree();
+            Open();
         }
 
         QueueRedraw();
+    }
+
+    public void Open()
+    {
+        if (_opened)
+        {
+            return;
+        }
+
+        _opened = true;
+        RemoveFromGroup(Group);
+        Opened?.Invoke(this);
+        QueueFree();
     }
 
     public override void _Draw()
